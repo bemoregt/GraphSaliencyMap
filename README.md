@@ -1,2 +1,135 @@
 # GraphSaliencyMap
-Spectral Saliency Map for Graph 
+
+A comprehensive implementation of Graph Spectral Saliency and Spatial Saliency algorithms for image analysis and visual attention detection.
+
+## Overview
+
+This project implements two powerful saliency detection methods:
+
+1. **Graph Spectral Saliency**: Uses spectral graph theory to identify salient regions by analyzing eigenvalues and eigenvectors of the image graph Laplacian matrix
+2. **Spatial Saliency**: Employs multi-scale Gaussian filtering and feature analysis in LAB color space with Gabor filters for orientation detection
+
+## Features
+
+- Interactive GUI with matplotlib for real-time visualization
+- Support for multiple image formats (PNG, JPG, JPEG, BMP)
+- Automatic image resizing for computational efficiency
+- Side-by-side comparison of original image and saliency maps
+- Heat map visualization using jet colormap
+
+## Algorithm Details
+
+### Graph Spectral Saliency
+
+- Converts each pixel to a graph node with 4-way connectivity (up, down, left, right)
+- Computes edge weights based on pixel intensity differences using exponential function
+- Constructs sparse adjacency matrix and Laplacian matrix
+- Calculates eigenvalues and eigenvectors using sparse matrix decomposition
+- Generates saliency map from gradient magnitude of eigenvectors weighted by inverse eigenvalues
+
+### Spatial Saliency
+
+- Multi-scale Gaussian filtering across different sigma values (1, 3, 5, 7)
+- Color contrast analysis in LAB color space (L, a, b channels)
+- Intensity contrast computation using grayscale differences
+- Orientation analysis with Gabor filters at 4 different angles (0°, 45°, 90°, 135°)
+- Feature map combination and Gaussian smoothing for final saliency map
+
+## Installation
+
+```bash
+git clone https://github.com/bemoregt/GraphSaliencyMap.git
+cd GraphSaliencyMap
+pip install -r requirements.txt
+```
+
+## Dependencies
+
+- OpenCV (opencv-python >= 4.5.0)
+- NumPy (>= 1.21.0)
+- SciPy (>= 1.7.0)
+- Matplotlib (>= 3.5.0)
+- tkinter (usually included with Python)
+
+## Usage
+
+```python
+python graph_spectral_saliency.py
+```
+
+### GUI Instructions
+
+1. **Load Image**: Click to select an image file from your system
+2. **Graph Spectral Saliency**: Compute and display spectral saliency map
+3. **Spatial Saliency Map**: Compute and display spatial saliency map
+
+### Programmatic Usage
+
+```python
+from graph_spectral_saliency import GraphSpectralSaliency, SpatialSaliency
+import cv2
+
+# Load image
+image = cv2.imread('your_image.jpg')
+
+# Initialize processors
+spectral_processor = GraphSpectralSaliency()
+spatial_processor = SpatialSaliency()
+
+# Compute saliency maps
+spectral_saliency = spectral_processor.compute_saliency(image)
+spatial_saliency = spatial_processor.compute_saliency(image)
+```
+
+## Performance Considerations
+
+- Images are automatically resized to maximum 256x256 pixels for computational efficiency
+- Graph spectral method uses sparse matrix operations for memory optimization
+- Eigenvalue computation limited to 10 smallest eigenvalues for faster processing
+
+## Applications
+
+- **Computer Vision**: Object detection and recognition preprocessing
+- **Image Analysis**: Attention region identification
+- **Medical Imaging**: Abnormality detection
+- **Robotics**: Visual attention for navigation
+- **Content-Aware Processing**: Image cropping and resizing
+
+## Technical Implementation
+
+### Graph Construction
+- **Nodes**: Each pixel represents a graph node
+- **Edges**: 4-connectivity between adjacent pixels
+- **Weights**: Exponential function of pixel intensity differences
+- **Laplacian**: L = D - A (Degree matrix - Adjacency matrix)
+
+### Spectral Analysis
+- **Eigendecomposition**: Uses ARPACK via SciPy for sparse matrices
+- **Saliency Computation**: Gradient magnitude of eigenvectors
+- **Weighting**: Inverse eigenvalue weighting for importance
+
+### Spatial Processing
+- **Color Spaces**: RGB to LAB conversion for perceptual uniformity
+- **Multi-scale**: Gaussian pyramids at multiple scales
+- **Orientation**: Gabor filter bank for directional features
+
+## License
+
+MIT License - see LICENSE file for details
+
+## Contributing
+
+Contributions are welcome! Please feel free to submit pull requests or open issues for bugs and feature requests.
+
+## Citation
+
+If you use this code in your research, please cite:
+
+```
+@software{GraphSaliencyMap,
+  title={Graph Spectral Saliency and Spatial Saliency Implementation},
+  author={bemoregt},
+  year={2025},
+  url={https://github.com/bemoregt/GraphSaliencyMap}
+}
+```
